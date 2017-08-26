@@ -40,10 +40,11 @@ public class BaseTest {
          * Activity name for the Android activity you want to launch from your package.
          * This often needs to be preceded by a . (e.g., .MainActivity instead of MainActivity).
          */
-        capabilities.setCapability("appActivity", "pl.bitsa.lupe2.SplashActivity");
+        //capabilities.setCapability("appActivity", "pl.bitsa.lupe2.SplashActivity");
+        capabilities.setCapability("appActivity", ".SplashActivity");
         //Activity name for the Android activity you want to wait for.
-        capabilities.setCapability("appWaitActivity", ".LoginActivity");
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        //capabilities.setCapability("appWaitActivity", ".LoginActivity");
+        driver = new AndroidDriver(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
 
     }
 

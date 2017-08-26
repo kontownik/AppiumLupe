@@ -1,106 +1,112 @@
 package pages;
 
+import helpers.ElementHelper;
+import helpers.PageLoad;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Pawel on 2017-04-19.
  */
-public class LoginPage extends AbstractPage {
+public class LoginPage extends LoadableComponent<LoginPage> {
+
+    private WebDriver driver;
 
     @AndroidFindBy(id = "pl.bitsa.lupe2:id/et_username")
-    private WebElement usernameInput;
+    private MobileElement usernameInput;
     @AndroidFindBy(id = "pl.bitsa.lupe2:id/et_password")
-    private WebElement passwordInput;
+    private MobileElement passwordInput;
     @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_go_google")
-    private WebElement googleLoginButton;
+    private MobileElement googleLoginButton;
     @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_go_facebook")
-    private WebElement facebookLoginButton;
+    private MobileElement facebookLoginButton;
     @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_go")
-    private WebElement accountLoginButton;
+    private MobileElement accountLoginButton;
     @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_guest")
-    private WebElement guestLoginButton;
+    private MobileElement guestLoginButton;
 
     //social login
     @AndroidFindBy(id = "com.google.android.gms:id/title")
-    private WebElement googleModalTitle;
+    private MobileElement googleModalTitle;
     @AndroidFindBy(id = "com.google.android.gms:id/account_name")
-    private List<WebElement> googleAccountsList;
+    private List<MobileElement> googleAccountsList;
 
     String googleModalTitleText = "Wybierz konto dla aplikacji Lupe2";
 
 
-    /*
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"pl.bitsa.lupe2:id/et_username\")")
-    //@AndroidFindBy(xpath = "//*[@resource-id='pl.bitsa.lupe2:id/et_username']")
-    private AndroidElement usernameInput;
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"pl.bitsa.lupe2:id/et_password\")")
-    private AndroidElement passwordInput;
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"pl.bitsa.lupe2:id/bt_go_facebook\")")
-    private AndroidElement googleLoginButton;
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"pl.bitsa.lupe2:id/bt_go_google\")")
-    private AndroidElement facebookLoginButton;
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"pl.bitsa.lupe2:id/bt_go\")")
-    private AndroidElement accountLoginButton;
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"pl.bitsa.lupe2:id/bt_guest\")")
-    private AndroidElement guestLoginButton;
-    */
-
-
     public LoginPage(WebDriver driver) {
-        super(driver);
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+
+        if(!this.isPageLoaded()) {
+            throw new Error("ERROR: Obiekt 'LoginPage' nie przeszedl testow dostepnosci i widocznosci elementow");
+        }
+
+        System.out.println("INFO: Udalo sie zaladowac obiekt 'LoginPage'");
+    }
+
+    @Override
+    protected void load() {
     }
 
     //przykladowa metoda
-    public boolean isLoginPageLoaded() {
+    public boolean isPageLoaded() {
         //inputs
-        textInputVerify(usernameInput);
-        textInputVerify(passwordInput);
+        ElementHelper.textInputVerify(usernameInput);
+        ElementHelper.textInputVerify(passwordInput);
 
         //buttons
         //buttonVerify(googleLoginButton);
-        buttonVerify(facebookLoginButton);
-        buttonVerify(accountLoginButton);
-        buttonVerify(guestLoginButton);
+        ElementHelper.buttonVerify(facebookLoginButton);
+        ElementHelper.buttonVerify(accountLoginButton);
+        ElementHelper.buttonVerify(guestLoginButton);
 
         //sprawdza czy znajduje sie w poprawnym Activity
-        Assert.assertEquals(getCurrentActivity(),".LoginActivity");
-        System.out.println(getCurrentActivity()); //debug
+        Assert.assertEquals(ElementHelper.getCurrentAndroidActivity(driver),".LoginActivity");
+        System.out.println(ElementHelper.getCurrentAndroidActivity(driver)); //debug
         return true;
     }
 
-    public boolean signInAsGuest() {
-        guestLoginButton.click();
-        return true;
-    }
-
-    public boolean signInAsUser(String username, String password) {
-        usernameInput.sendKeys(username);
-        passwordInput.sendKeys(password);
-        accountLoginButton.click();
-        //sprawdzanie czy nie wyswietlil sie jakis komunikat bledu w przypadku kontrolki natywnej Androida (textedit) nie jest mozliwe
-        return true;
-    }
-
-    public boolean signInAsGoogleUser(String socialEmail) {
-        googleLoginButton.click();
-        WebDriverWait wait = new WebDriverWait(driver,15);
-        wait.until(ExpectedConditions.visibilityOf(googleModalTitle));
-        Assert.assertEquals(googleModalTitle.getText(),googleModalTitleText);
-        //wyszukuje adresu email na liscie kont
-        for (WebElement item:googleAccountsList) {
-            if(item.getText().equals(socialEmail)){
-                item.click();
-                return true;
-            }
+    public MainPage signInAsGuest() {
+        try {
+            guestLoginButton.click();
         }
-        return false;
+        catch (Exception ex) {
+            throw new Error("ERROR: Nie udalo sie przejsc logowania jako gosc | "+ex);
+        }
+        return new MainPage(driver);
+    }
+
+    public MainPage signInAsUser(String username, String password) {
+        try {
+            usernameInput.sendKeys(username);
+            passwordInput.sendKeys(password);
+            accountLoginButton.click();
+        }
+        catch (Exception ex) {
+            throw new Error("ERROR: Nie udalo sie przejsc logowania jako uzytkownik | "+ex);
+        }
+        return new MainPage(driver);
+    }
+
+    public GoogleLoginPage signInAsGoogleUser() {
+        googleLoginButton.click();
+        return new GoogleLoginPage(driver);
     }
 
     //android.webkit.WebView
