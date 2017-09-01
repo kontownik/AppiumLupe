@@ -5,6 +5,8 @@ import helpers.PageLoad;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -15,41 +17,55 @@ import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Pawel on 2017-04-19.
  */
-public class LoginPage extends LoadableComponent<LoginPage> {
+public class LoginPage extends AbstractPage {
 
     private WebDriver driver;
+    private static final String usernameInputLocator = "pl.bitsa.lupe2:id/et_username";
+    private static final String passwordInputLocator = "pl.bitsa.lupe2:id/et_password";
+    private static final String googleLoginButtonLocator = "pl.bitsa.lupe2:id/bt_go_google";
+    private static final String facebookLoginButtonLocator = "pl.bitsa.lupe2:id/bt_go_facebook";
+    private static final String accountLoginButtonLocator = "pl.bitsa.lupe2:id/bt_go";
+    private static final String guestLoginButtonLocator = "pl.bitsa.lupe2:id/bt_guest";
+    private static final String googleModalTitleLocator = "com.google.android.gms:id/title";
+    private static final String googleAccountsListLocator = "com.google.android.gms:id/account_name";
 
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/et_username")
-    private MobileElement usernameInput;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/et_password")
-    private MobileElement passwordInput;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_go_google")
-    private MobileElement googleLoginButton;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_go_facebook")
-    private MobileElement facebookLoginButton;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_go")
-    private MobileElement accountLoginButton;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/bt_guest")
-    private MobileElement guestLoginButton;
+    @AndroidFindBy(id = usernameInputLocator)
+    private WebElement usernameInput;
+    @AndroidFindBy(id = passwordInputLocator)
+    private WebElement passwordInput;
+    @AndroidFindBy(id = googleLoginButtonLocator)
+    private WebElement googleLoginButton;
+    @AndroidFindBy(id = facebookLoginButtonLocator)
+    private WebElement facebookLoginButton;
+    @AndroidFindBy(id = accountLoginButtonLocator)
+    private WebElement accountLoginButton;
+    @AndroidFindBy(id = guestLoginButtonLocator)
+    private WebElement guestLoginButton;
 
-    //social login
-    @AndroidFindBy(id = "com.google.android.gms:id/title")
-    private MobileElement googleModalTitle;
-    @AndroidFindBy(id = "com.google.android.gms:id/account_name")
-    private List<MobileElement> googleAccountsList;
+    //google social login
+    @AndroidFindBy(id = googleModalTitleLocator)
+    private WebElement googleModalTitle;
+    @AndroidFindBy(id = googleAccountsListLocator)
+    private List<WebElement> googleAccountsList;
+    private static final String googleModalTitleText = "Wybierz konto dla aplikacji Lupe2";
 
-    String googleModalTitleText = "Wybierz konto dla aplikacji Lupe2";
 
-
+    /*
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
+    */
+    public LoginPage(WebDriver driver) {
+        super(driver);
+    }
 
+    /*
     @Override
     protected void isLoaded() throws Error {
 
@@ -57,31 +73,56 @@ public class LoginPage extends LoadableComponent<LoginPage> {
             throw new Error("ERROR: Obiekt 'LoginPage' nie przeszedl testow dostepnosci i widocznosci elementow");
         }
 
-        System.out.println("INFO: Udalo sie zaladowac obiekt 'LoginPage'");
+        System.out.println("INFO: Udalo sie zaladowac obiektu 'LoginPage'");
     }
 
     @Override
     protected void load() {
     }
+*/
 
-    //przykladowa metoda
+    /*
     public boolean isPageLoaded() {
         //inputs
-        ElementHelper.textInputVerify(usernameInput);
-        ElementHelper.textInputVerify(passwordInput);
+        ElementHelper.textInputVerify(driver, By.id(usernameInputLocator), 5);
+        ElementHelper.textInputVerify(driver, By.id(passwordInputLocator), 5);
 
         //buttons
-        //buttonVerify(googleLoginButton);
-        ElementHelper.buttonVerify(facebookLoginButton);
-        ElementHelper.buttonVerify(accountLoginButton);
-        ElementHelper.buttonVerify(guestLoginButton);
+        ElementHelper.buttonVerify(driver, By.id(googleLoginButtonLocator),5);
+        ElementHelper.buttonVerify(driver, By.id(facebookLoginButtonLocator),5);
+        ElementHelper.buttonVerify(driver, By.id(accountLoginButtonLocator),5);
+        ElementHelper.buttonVerify(driver, By.id(guestLoginButtonLocator),5);
 
         //sprawdza czy znajduje sie w poprawnym Activity
         Assert.assertEquals(ElementHelper.getCurrentAndroidActivity(driver),".LoginActivity");
         System.out.println(ElementHelper.getCurrentAndroidActivity(driver)); //debug
         return true;
     }
+    */
+    public boolean isPageLoaded() {
 
+        //sprawdza czy znajduje sie w poprawnym Activity
+        waitForActivity(".LoginActivity");
+        System.out.println("INFO: Przejście do: "+getCurrentAndroidActivity());
+
+        //inputs
+        textInputVerify(usernameInput);
+        textInputVerify(passwordInput);
+
+        //buttons
+        //buttonVerify(googleLoginButton);
+        //buttonVerify(facebookLoginButton);
+        buttonVerify(accountLoginButton);
+        buttonVerify(guestLoginButton);
+
+        return true;
+    }
+
+    public void signInAsGuest() {
+        guestLoginButton.click();
+    }
+
+    /*
     public MainPage signInAsGuest() {
         try {
             guestLoginButton.click();
@@ -91,6 +132,7 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         }
         return new MainPage(driver);
     }
+    */
 
     public MainPage signInAsUser(String username, String password) {
         try {

@@ -15,13 +15,19 @@ public class LoginTest extends BaseTest {
     @Test
     public void guestLogin()  throws Exception {
 
+        //Thread.sleep(10000);
         //1. odpala sie strona logowania
-        /*LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.isPageLoaded();
 
         //2. Loguje się jako "gosc"
-        MainPage mainPage = loginPage.signInAsGuest();
+        //MainPage mainPage = loginPage.signInAsGuest();
+        loginPage.signInAsGuest();
+        MainPage mainPage = new MainPage(driver);
+        mainPage.isPageLoaded();
         System.out.println("INFO: Udalo sie zalogowac jako gosc");
-        */
+        Thread.sleep(5000);
+
     }
 
     //POSITIVE

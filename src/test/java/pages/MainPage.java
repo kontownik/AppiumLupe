@@ -15,67 +15,39 @@ import java.util.List;
 /**
  * Created by Pawel on 2017-04-27.
  */
-public class MainPage extends LoadableComponent<MainPage> {
+public class MainPage extends AbstractPage {
 
     private WebDriver driver;
+    private static final String refreshButtonLocator = "pl.bitsa.lupe2:id/action_refresh";
+    private static final String mainListViewLocator = "pl.bitsa.lupe2:id/mainListView";
+    private static final String addNewReportButtonLocator = "pl.bitsa.lupe2:id/fab";
+    private static final String topToolbarLocator = "pl.bitsa.lupe2:id/toolbar";
 
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/ld_title")
-    private WebElement modalTitle;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/action_refresh")
+    @AndroidFindBy(id = refreshButtonLocator)
     private WebElement refreshButton;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/mainListView")
+    @AndroidFindBy(id = mainListViewLocator)
     private WebElement mainListView;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/fab")
+    @AndroidFindBy(id = addNewReportButtonLocator)
     private WebElement addNewReportButton;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/ld_choices")
-    private WebElement cityViewList;
-    @AndroidFindBy(id = "pl.bitsa.lupe2:id/city_name")
-    private List<WebElement> cityNamesList;
+    @AndroidFindBy(id = topToolbarLocator)
+    private WebElement topToolbar;
 
-
-    String  modalTitleText = "Wybierz miasto";
-    Integer expectedCityCount = 3;
 
     public MainPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
-    @Override
-    protected void isLoaded() throws Error {
+    public boolean isPageLoaded() {
 
-        if(!this.isPageLoaded()) {
-            throw new Error("ERROR: Obiekt 'MainPage' nie przeszedl testow dostepnosci i widocznosci elementow");
-        }
-
-        System.out.println("INFO: Udalo sie zaladowac obiekt 'MainPage'");
-    }
-
-    @Override
-    protected void load() {
-    }
-
-    public boolean isPageLoaded() { //TODO: rework city picker do osobnego obiektu
-        //isCityChooseLoaded();
         //sprawdza czy znajduje sie w poprawnym Activity
-        Assert.assertEquals(ElementHelper.getCurrentAndroidActivity(driver),".MainActivity");
-        System.out.println(ElementHelper.getCurrentAndroidActivity(driver)); //debug
-        return true;
-    }
+        waitForActivity(".MainActivity");
+        System.out.println("INFO: Przejście do: "+getCurrentAndroidActivity());
 
-    public boolean isCityChooseLoaded(){ //okno z wyborem miast
-        WebDriverWait wait = new WebDriverWait(driver,15);
-        wait.until(ExpectedConditions.visibilityOf(modalTitle));
-        Assert.assertEquals(modalTitle.getText(),modalTitleText);
-        Assert.assertTrue(cityViewList.isDisplayed(),"Lista wyboru miast jest niewidoczna");
-        Assert.assertEquals(getcityCount(), expectedCityCount);
-        //TUTAJ CHYBA TRZEBA DAC CATCH
-        return true;
-    }
+        //buttons
+        buttonVerify(refreshButton);
+        buttonVerify(addNewReportButton);
 
-    //podaje wielkosc listy z wyborem miast
-    public Integer getcityCount(){
-        return cityNamesList.size();
+        return true;
     }
 
 }

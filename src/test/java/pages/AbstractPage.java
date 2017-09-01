@@ -6,6 +6,8 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.util.concurrent.TimeUnit;
@@ -16,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractPage {
 
     protected WebDriver driver;
+    private static String activityText = "";
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
@@ -23,9 +26,21 @@ public abstract class AbstractPage {
     }
 
     // pobiera aktualne Androidowe Activity
-    public String getCurrentActivity()
+    public String getCurrentAndroidActivity()
     {
         return ((AndroidDriver<MobileElement>)driver).currentActivity();
+    }
+
+    public void waitForActivity(String activityName)
+    {
+        this.activityText = activityName;
+        new WebDriverWait(driver,10).until(new ExpectedCondition<Boolean>() {
+
+            public Boolean apply(WebDriver driver) {
+                String value = getCurrentAndroidActivity();
+                return value.equals(activityText);
+            }
+        });
     }
 
     // sprawdza czy input jest widoczny i dostepny

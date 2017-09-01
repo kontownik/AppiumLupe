@@ -4,7 +4,6 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.remote.MobilePlatform;
-import io.appium.java_client.android.Activity;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -46,7 +45,11 @@ public class BaseTest {
         capabilities.setCapability("appActivity", ".SplashActivity");
         //Activity name for the Android activity you want to wait for.
         capabilities.setCapability("appWaitActivity", ".LoginActivity");
-        driver = new AndroidDriver(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
+        //niepotrzebny reinstall appek pomocniczych
+        capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
+        capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+
+        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 
     }
 
