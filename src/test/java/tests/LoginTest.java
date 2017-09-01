@@ -15,18 +15,18 @@ public class LoginTest extends BaseTest {
     @Test
     public void guestLogin()  throws Exception {
 
-        //Thread.sleep(10000);
         //1. odpala sie strona logowania
         LoginPage loginPage = new LoginPage(driver);
         loginPage.isPageLoaded();
 
-        //2. Loguje się jako "gosc"
-        //MainPage mainPage = loginPage.signInAsGuest();
+        //2. Loguje się jako "gosc" (przekierowanie na strone glowna)
         loginPage.signInAsGuest();
         MainPage mainPage = new MainPage(driver);
         mainPage.isPageLoaded();
-        System.out.println("INFO: Udalo sie zalogowac jako gosc");
-        Thread.sleep(5000);
+        System.out.println("INFO: Udało się zalogować jako użytkownik 'Gość'");
+
+        //3. Sprawdzam czy lista zgłoszeń nie jest pusta
+        Assert.assertFalse(mainPage.isListEmpty(),"ERROR: Lista główna jest pusta!");
 
     }
 

@@ -1,23 +1,9 @@
 package pages;
 
-import helpers.ElementHelper;
-import helpers.PageLoad;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.LoadableComponent;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Pawel on 2017-04-19.
@@ -54,51 +40,10 @@ public class LoginPage extends AbstractPage {
     private List<WebElement> googleAccountsList;
     private static final String googleModalTitleText = "Wybierz konto dla aplikacji Lupe2";
 
-
-    /*
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
-    */
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
-    /*
-    @Override
-    protected void isLoaded() throws Error {
-
-        if(!this.isPageLoaded()) {
-            throw new Error("ERROR: Obiekt 'LoginPage' nie przeszedl testow dostepnosci i widocznosci elementow");
-        }
-
-        System.out.println("INFO: Udalo sie zaladowac obiektu 'LoginPage'");
-    }
-
-    @Override
-    protected void load() {
-    }
-*/
-
-    /*
-    public boolean isPageLoaded() {
-        //inputs
-        ElementHelper.textInputVerify(driver, By.id(usernameInputLocator), 5);
-        ElementHelper.textInputVerify(driver, By.id(passwordInputLocator), 5);
-
-        //buttons
-        ElementHelper.buttonVerify(driver, By.id(googleLoginButtonLocator),5);
-        ElementHelper.buttonVerify(driver, By.id(facebookLoginButtonLocator),5);
-        ElementHelper.buttonVerify(driver, By.id(accountLoginButtonLocator),5);
-        ElementHelper.buttonVerify(driver, By.id(guestLoginButtonLocator),5);
-
-        //sprawdza czy znajduje sie w poprawnym Activity
-        Assert.assertEquals(ElementHelper.getCurrentAndroidActivity(driver),".LoginActivity");
-        System.out.println(ElementHelper.getCurrentAndroidActivity(driver)); //debug
-        return true;
-    }
-    */
     public boolean isPageLoaded() {
 
         //sprawdza czy znajduje sie w poprawnym Activity
@@ -121,18 +66,6 @@ public class LoginPage extends AbstractPage {
     public void signInAsGuest() {
         guestLoginButton.click();
     }
-
-    /*
-    public MainPage signInAsGuest() {
-        try {
-            guestLoginButton.click();
-        }
-        catch (Exception ex) {
-            throw new Error("ERROR: Nie udalo sie przejsc logowania jako gosc | "+ex);
-        }
-        return new MainPage(driver);
-    }
-    */
 
     public MainPage signInAsUser(String username, String password) {
         try {

@@ -56,6 +56,10 @@ public abstract class AbstractPage {
         Assert.assertTrue(Boolean.valueOf(button.getAttribute("clickable")),"Przycisk '"+button.getText()+"' jest nieklikalny");
     }
 
+    public void isVisible(WebElement element){
+        Assert.assertTrue(element.isDisplayed(),"Element '"+element.getText()+"' jest niewidoczny");
+    }
+
     public void switchContext (){
 
     }
