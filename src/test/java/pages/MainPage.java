@@ -1,6 +1,7 @@
 package pages;
 
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -60,6 +61,17 @@ public class MainPage extends AbstractPage {
             System.out.println("INFO: Lista główna nie jest pusta");
         }
         return false;
+    }
+
+    public void useAddButton(){
+        addNewReportButton.click();
+    }
+
+    //TODO: przeniesc jako toolbarpage
+    public void openMenu(){
+        WebElement menuButton = topToolbar.findElement(By.className("android.widget.ImageButton"));
+        System.out.println(menuButton.getText());
+        menuButton.click();
     }
 
 }

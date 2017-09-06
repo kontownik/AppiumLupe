@@ -1,12 +1,14 @@
 package pages;
 
-import io.appium.java_client.MobileElement;
+import io.appium.java_client.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
@@ -22,7 +24,7 @@ public abstract class AbstractPage {
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver, 20, TimeUnit.SECONDS), this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver, 5, TimeUnit.SECONDS), this);
     }
 
     // pobiera aktualne Androidowe Activity
@@ -43,6 +45,31 @@ public abstract class AbstractPage {
         });
     }
 
+    public void waitForText(String activityName) {
+
+    }
+
+    public void clickOnListPosition(WebElement element, Integer position) {
+
+    }
+
+    //przycisk wstecz
+    public void nativeGoBack() {
+
+    }
+
+    public void scrollTo(WebElement element){
+/*
+        WebElement abc = driver.findElement(By.name8(elementName1));
+        WebElement abc2 = driver.findElement(By.name8(elementName2));
+        int x = abc.getLocation().getX();
+        int y = abc.getLocation().getY();
+        int x1 = abc2.getLocation().getX();
+        int y1 = abc2.getLocation().getY();
+        (AndroidDriver)driver.sw
+*/
+    }
+
     // sprawdza czy input jest widoczny i dostepny
     public void textInputVerify(WebElement textInput){
         Assert.assertTrue(textInput.isDisplayed(),"Input '"+textInput.getText()+"' jest niewidoczny");
@@ -54,6 +81,11 @@ public abstract class AbstractPage {
         Assert.assertTrue(button.isDisplayed(),"Przycisk '"+button.getAttribute("text")+"' jest niewidoczny");
         Assert.assertTrue(button.isEnabled(), "Przycisk '"+button.getAttribute("text")+"' jest niedostepny");
         Assert.assertTrue(Boolean.valueOf(button.getAttribute("clickable")),"Przycisk '"+button.getText()+"' jest nieklikalny");
+    }
+
+    //czy checkbos jest zaznaczony
+    public void checkboxCheckedVerify(){
+
     }
 
     public void isVisible(WebElement element){

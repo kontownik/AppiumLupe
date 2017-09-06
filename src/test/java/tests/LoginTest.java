@@ -1,10 +1,12 @@
 package tests;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.GoogleLoginPage;
 import pages.LoginPage;
 import pages.MainPage;
+import pages.MenuPage;
 
 /**
  * Created by Pawel on 2017-04-19.
@@ -14,6 +16,9 @@ public class LoginTest extends BaseTest {
     //POSITIVE
     @Test
     public void guestLogin()  throws Exception {
+
+        String expectedName = "Gość";
+        String expectedEmail ="(brak)";
 
         //1. odpala sie strona logowania
         LoginPage loginPage = new LoginPage(driver);
@@ -28,10 +33,27 @@ public class LoginTest extends BaseTest {
         //3. Sprawdzam czy lista zgłoszeń nie jest pusta
         Assert.assertFalse(mainPage.isListEmpty(),"ERROR: Lista główna jest pusta!");
 
+        //4. Otwieram menu
+        mainPage.openMenu();
+        MenuPage menuPage = new MenuPage(driver);
+        menuPage.isPageLoaded();
+        System.out.println("INFO: Udało się otworzyć menu boczne");
+
+        //5. Sprawdzam czy menu ma odpowiednia liczbe wpisow
+        menuPage.printMenuItems();
+        Assert.assertEquals(menuPage.getMenuSize(),5);
+
+        //6. Sprawdzam czy jestem zalogowany jako GOSC
+        Assert.assertTrue(menuPage.getPersonName().equals(expectedName),"ERROR: Wyswietlona nazwa uzytkownika jest inna niz spodziewana");
+        Assert.assertTrue(menuPage.getPersonEmail().equals(expectedEmail),"ERROR: Wyswietlona email uzytkownika jest inny niz spodziewany");
+
+        //7.Wylogowuje sie przez menu
+        //menuPage.logOut();
     }
 
     //POSITIVE
     @Test
+    @Ignore
     public void smartsiteUserLogin() throws Exception {
 
         //1. odpala sie strona logowania
@@ -44,6 +66,7 @@ public class LoginTest extends BaseTest {
 
     //POSITIVE
     @Test
+    @Ignore
     public void googleUserLogin() throws Exception {
 
         //1. odpala sie strona logowania
