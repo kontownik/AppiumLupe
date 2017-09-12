@@ -1,5 +1,7 @@
 package pages;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,7 +12,6 @@ import org.openqa.selenium.WebElement;
  */
 public class MainPage extends AbstractPage {
 
-    private WebDriver driver;
     private static final String refreshButtonLocator = "pl.bitsa.lupe2:id/action_refresh";
     private static final String mainListViewLocator = "pl.bitsa.lupe2:id/recyclerview";
     private static final String addNewReportButtonLocator = "pl.bitsa.lupe2:id/fab";
@@ -31,7 +32,7 @@ public class MainPage extends AbstractPage {
     private WebElement textNoData;
 
 
-    public MainPage(WebDriver driver) {
+    public MainPage(AndroidDriver driver) {
         super(driver);
     }
 

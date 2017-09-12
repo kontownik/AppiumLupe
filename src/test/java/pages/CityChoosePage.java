@@ -1,5 +1,7 @@
 package pages;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,7 +28,7 @@ public class CityChoosePage extends AbstractPage {
     private List<WebElement> cityList;
 
 
-    public CityChoosePage(WebDriver driver) {
+    public CityChoosePage(AndroidDriver driver) {
         super(driver);
     }
 

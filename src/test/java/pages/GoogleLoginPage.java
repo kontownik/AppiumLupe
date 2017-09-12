@@ -1,6 +1,7 @@
 package pages;
 
 import helpers.ElementHelper;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.WithTimeout;
@@ -67,7 +68,7 @@ public class GoogleLoginPage extends LoadableComponent<GoogleLoginPage> {
         }
     }
 
-    public MainPage loginAction(String socialEmail) {
+    public void loginAction(String socialEmail) {
 
         //wyszukuje adresu email na liscie kont (zdefiniowanych wczesniej na telefonie)
         for (WebElement item:googleAccountsList) {
@@ -75,6 +76,5 @@ public class GoogleLoginPage extends LoadableComponent<GoogleLoginPage> {
                 item.click();
             }
         }
-        return new MainPage(driver);
     }
 }

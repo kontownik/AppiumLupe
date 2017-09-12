@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractPage {
 
-    protected WebDriver driver;
+    protected AndroidDriver driver;
     private static String activityText = "";
 
-    public AbstractPage(WebDriver driver) {
+    public AbstractPage(AndroidDriver driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver, 5, TimeUnit.SECONDS), this);
     }

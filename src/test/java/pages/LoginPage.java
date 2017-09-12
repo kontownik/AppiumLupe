@@ -1,5 +1,7 @@
 package pages;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,7 +12,6 @@ import java.util.List;
  */
 public class LoginPage extends AbstractPage {
 
-    private WebDriver driver;
     private static final String usernameInputLocator = "pl.bitsa.lupe2:id/et_username";
     private static final String passwordInputLocator = "pl.bitsa.lupe2:id/et_password";
     private static final String googleLoginButtonLocator = "pl.bitsa.lupe2:id/bt_go_google";
@@ -40,7 +41,7 @@ public class LoginPage extends AbstractPage {
     private List<WebElement> googleAccountsList;
     private static final String googleModalTitleText = "Wybierz konto dla aplikacji Lupe2";
 
-    public LoginPage(WebDriver driver) {
+    public LoginPage(AndroidDriver driver) {
         super(driver);
     }
 

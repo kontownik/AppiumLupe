@@ -19,7 +19,7 @@ import utility.PropertyValues;
  * Created by Pawel on 2017-04-19.
  */
 public class BaseTest {
-    protected static AppiumDriver driver = null;
+    protected static AndroidDriver driver = null;
     private static DesiredCapabilities capabilities = null;
     PropertyValues properties = new PropertyValues();
 
