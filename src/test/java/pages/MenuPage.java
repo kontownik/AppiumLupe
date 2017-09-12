@@ -67,26 +67,6 @@ public class MenuPage extends AbstractPage {
         return itemsList.size();
     }
 
-    public void scroll() {
-        ((AndroidDriver) driver).findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView("+ "new UiSelector().text(\"Komunikaty\"));").click();
-    }
-
-    public void clickMenuItemByText(String menuItemText){
-
-        for (WebElement item:itemsList){
-            if(item.getAttribute("text").equals(menuItemText)){
-                item.click();
-                return;
-            }
-        }
-        //jezeli po wykonaniu petli nie widac menuItema, scrolluj do ostatniego elementu i sprawdz liste petla
-        //TODO: scroll to??
-        WebElement lastItem = itemsList.get(itemsList.size()-1);
-        new TouchAction(((AndroidDriver) driver)).press(lastItem).moveTo(100,100).release(); //waitAction((int)2000)
-        this.clickMenuItemByText(menuItemText);
-
-    }
-
     public void printMenuItems(){
         System.out.println("INFO: Menu widoczne na ekranie ("+getMenuSize()+"): ");
         for (WebElement item:itemsList){

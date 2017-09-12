@@ -2,6 +2,7 @@ package pages;
 
 import io.appium.java_client.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -55,11 +56,20 @@ public abstract class AbstractPage {
 
     //przycisk wstecz
     public void nativeGoBack() {
-
+        driver.pressKeyCode(AndroidKeyCode.BACK);
     }
 
-    public void scrollTo(WebElement element){
-/*
+    public void scrollToTextAndClick(String value) {
+        try {
+            driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(" + "new UiSelector().text(\"" + value + "));").click();
+        }
+        catch (Exception e){
+            throw new Error(e);
+        }
+    }
+
+    /*
+    public void scrollToElement(WebElement element){
         WebElement abc = driver.findElement(By.name8(elementName1));
         WebElement abc2 = driver.findElement(By.name8(elementName2));
         int x = abc.getLocation().getX();
@@ -67,8 +77,8 @@ public abstract class AbstractPage {
         int x1 = abc2.getLocation().getX();
         int y1 = abc2.getLocation().getY();
         (AndroidDriver)driver.sw
-*/
     }
+    */
 
     // sprawdza czy input jest widoczny i dostepny
     public void textInputVerify(WebElement textInput){

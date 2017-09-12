@@ -6,12 +6,15 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Created by Pawel on 2017-04-27.
  */
 public class MainPage extends AbstractPage {
 
+    private static final String mainTitleLocator = "pl.bitsa.lupe2:id/ld_title"; //city choose
     private static final String refreshButtonLocator = "pl.bitsa.lupe2:id/action_refresh";
     private static final String mainListViewLocator = "pl.bitsa.lupe2:id/recyclerview";
     private static final String addNewReportButtonLocator = "pl.bitsa.lupe2:id/fab";
@@ -60,6 +63,18 @@ public class MainPage extends AbstractPage {
         }
         catch(Exception ex) {
             System.out.println("INFO: Lista główna nie jest pusta");
+        }
+        return false;
+    }
+
+    public boolean isCityChooseVisible() {
+        try {
+            new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.id(mainTitleLocator)));
+            CityChoosePage cityChoosePage = new CityChoosePage(driver);
+            scrollToTextAndClick("Białystok");
+        }
+        catch (Exception e) {
+            return false;
         }
         return false;
     }
