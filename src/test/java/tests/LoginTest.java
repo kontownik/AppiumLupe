@@ -50,6 +50,7 @@ public class LoginTest extends BaseTest {
 
         //7. Wylogowuje się przez menu
         menuPage.scrollToTextAndClick("Wyloguj");
+        System.out.println("INFO: Wylogowano przez boczne menu'");
     }
 
     //POSITIVE

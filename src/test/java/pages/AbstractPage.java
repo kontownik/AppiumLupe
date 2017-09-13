@@ -61,7 +61,7 @@ public abstract class AbstractPage {
 
     public void scrollToTextAndClick(String value) {
         try {
-            driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(" + "new UiSelector().text(\"" + value + "));").click();
+            driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(" + "new UiSelector().text(\"" + value + "\"));").click();
         }
         catch (Exception e){
             throw new Error(e);
