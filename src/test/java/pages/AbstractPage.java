@@ -41,11 +41,10 @@ public abstract class AbstractPage {
 
             public Boolean apply(WebDriver driver) {
                 String value = getCurrentAndroidActivity();
-                System.out.println("DEBUG: "+value);
+                //System.out.println("DEBUG: "+value);
                 return value.equals(activityText);
             }
         });
-        //return;
     }
 
     public void waitForVisibility(WebElement element) {
