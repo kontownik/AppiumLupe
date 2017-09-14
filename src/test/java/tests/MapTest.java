@@ -1,5 +1,6 @@
 package tests;
 
+import org.testng.Assert;
 import pages.*;
 
 /**
@@ -7,10 +8,11 @@ import pages.*;
  */
 public class MapTest extends BaseTest {
 
-    public void mainListTest(String value) throws Exception {
+    public void mapTest(String value) throws Exception {
 
         //* Zmienne wejsciowe
         String defaultCity = "Białystok"; //TODO: dodac do properties?
+        Integer countOnMenu = 0;
 
         //1. Otwiera się strona logowania
         LoginPage loginPage = new LoginPage(driver);
@@ -36,7 +38,12 @@ public class MapTest extends BaseTest {
         menuPage.isPageLoaded();
         System.out.println("INFO: Udało się otworzyć menu boczne");
 
-        //5. Przechodzę na mapę zgłoszeń lub komunikatów (Mapa zgłoszeń)
+        // Zbieram liczbę zgłoszeń z menu
+        if(value.equals("Mapa zgłoszeń")) {
+            countOnMenu = menuPage.getReportsCount();
+        }
+
+        //5. Przechodzę na mapę zgłoszeń (Mapa zgłoszeń)
         menuPage.scrollToTextAndClick(value);
         System.out.println("INFO: Menu boczne, przejście do '"+value+"'");
 
@@ -45,23 +52,16 @@ public class MapTest extends BaseTest {
         mapPage.isPageLoaded();
         System.out.println("INFO: Udało się załadować Mapę zgłoszeń");
 
+        //Zlicza ile jest markerow na mapie i porównuje z liczbą na menu
+        System.out.println("WARNING: Markerów na menu "+countOnMenu+". Markerów na mapie "+mapPage.getMarkersCount());
+
         //Wybieram pierwszy marker
         mapPage.clickMarkerByIndex(0);
 
         //Sprawdzam czy pokazało się okno Szczegółów (sprawdzam wartości pól wartości)
         mapPage.isDetailsLoaded();
         mapPage.printCurrentDetails();
-
-        //Otwieram menu
-        mainPage.openMenu();
-        menuPage = new MenuPage(driver);
-        menuPage.isPageLoaded();
-        System.out.println("INFO: Udało się otworzyć menu boczne");
-
-        //Wylogowuje się przez menu
-        menuPage.scrollToTextAndClick("Wyloguj");
-        System.out.println("INFO: Wylogowano przez boczne menu");
-
+        mapPage.clickDetailsButton();
     }
 
 }

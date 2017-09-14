@@ -15,7 +15,7 @@ public class MapPage extends AbstractPage {
     private static final String refreshButtonLocator = "pl.bitsa.lupe2:id/action_refresh";
     private static final String addButtonLocator = "pl.bitsa.lupe2:id/fab";
     private static final String topToolbarLocator = "pl.bitsa.lupe2:id/toolbar";
-    private static final String mapLayerLocator = "private static final String ";
+    private static final String mapLayerLocator = "pl.bitsa.lupe2:id/mapView";
     private static final String markerContainerLocator = "//android.view.View[contains(@content-desc,'Mapa Google')]";
     private static final String singleMarkerLocator = "//android.view.View[contains(@content-desc,'Mapa Google')]/android.view.View";
     private static final String detailsWindowLocator = "pl.bitsa.lupe2:id/info_layout";
@@ -61,8 +61,10 @@ public class MapPage extends AbstractPage {
     public boolean isPageLoaded() {
 
         //sprawdza czy znajduje sie w poprawnym Activity
-        waitForActivity(".MapActivity");
-        System.out.println("INFO: Przejście do: "+getCurrentAndroidActivity());
+        waitForActivity(".MainActivity");
+        //sprawdza czy zaladowala sie warstwa z mapa
+        waitForVisibility(mapLayer);
+        System.out.println("INFO: Przejście do: "+getCurrentAndroidActivity()+" (MapPage)");
 
         //buttons
         buttonVerify(refreshButton);
@@ -70,9 +72,10 @@ public class MapPage extends AbstractPage {
 
         //elementy
         isVisible(topToolbar);
-        isVisible(mapLayer);
-        isVisible(mapLayer);
         isVisible(markerContainer);
+
+        //markery
+        System.out.println("INFO: Znaleziono "+markersList.size()+" markerów na mapie");
         return true;
     }
 
@@ -90,12 +93,21 @@ public class MapPage extends AbstractPage {
         }
     }
 
+    public Integer getMarkersCount(){
+        return markersList.size();
+    }
+
     public void useAddButton(){
         addButton.click();
     }
 
+    public void clickDetailsButton(){
+        detailsButton.click();
+    }
+
     public void clickMarkerByIndex(Integer index){
-        driver.findElement(By.xpath(singleMarkerLocator+"["+index+"]")).click();
+        //driver.findElement(By.xpath("("+singleMarkerLocator+")["+index+"]")).click();
+        markersList.get(index).click();
     }
 
     public void printCurrentDetails(){

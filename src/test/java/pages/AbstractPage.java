@@ -25,7 +25,7 @@ public abstract class AbstractPage {
 
     public AbstractPage(AndroidDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver, 5, TimeUnit.SECONDS), this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver, 3, TimeUnit.SECONDS), this);
     }
 
     // pobiera aktualne Androidowe Activity
@@ -41,9 +41,15 @@ public abstract class AbstractPage {
 
             public Boolean apply(WebDriver driver) {
                 String value = getCurrentAndroidActivity();
+                System.out.println("DEBUG: "+value);
                 return value.equals(activityText);
             }
         });
+        //return;
+    }
+
+    public void waitForVisibility(WebElement element) {
+        new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOf(element));
     }
 
     public void waitForText(String activityName) {
@@ -68,18 +74,6 @@ public abstract class AbstractPage {
         }
     }
 
-    /*
-    public void scrollToElement(WebElement element){
-        WebElement abc = driver.findElement(By.name8(elementName1));
-        WebElement abc2 = driver.findElement(By.name8(elementName2));
-        int x = abc.getLocation().getX();
-        int y = abc.getLocation().getY();
-        int x1 = abc2.getLocation().getX();
-        int y1 = abc2.getLocation().getY();
-        (AndroidDriver)driver.sw
-    }
-    */
-
     // sprawdza czy input jest widoczny i dostepny
     public void textInputVerify(WebElement textInput){
         Assert.assertTrue(textInput.isDisplayed(),"Input '"+textInput.getText()+"' jest niewidoczny");
@@ -102,10 +96,18 @@ public abstract class AbstractPage {
         Assert.assertTrue(element.isDisplayed(),"Element '"+element.getText()+"' jest niewidoczny");
     }
 
+    public void isErrorVisible() { //snackbar
+        try {
+            driver.findElementByAndroidUIAutomator("new UiSelector().text(\"Błąd\");");
+            new Error("ERROR: Znaleziono błąd! (snackbar)");
+        }
+        catch (Exception ex) {
+            return;
+        }
+    }
+
     public void switchContext (){
 
     }
-
-
 
 }

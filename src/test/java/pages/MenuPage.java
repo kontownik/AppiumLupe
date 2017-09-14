@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Pawel on 2017-04-27.
@@ -42,6 +43,9 @@ public class MenuPage extends AbstractPage {
     @AndroidFindBy(id = singleMenuItemLocator)
     private List<WebElement> itemsList;
 
+    @AndroidFindBy(id = reportsCountLocator)
+    private WebElement reportsCount;
+
 
     public MenuPage(AndroidDriver driver) {
         super(driver);
@@ -65,6 +69,16 @@ public class MenuPage extends AbstractPage {
 
     public int getMenuSize(){
         return itemsList.size();
+    }
+
+    public Integer getReportsCount() {
+        try {
+            waitForVisibility(reportsCount);
+            return Integer.parseInt(reportsCount.getText());
+        }
+        catch (NoSuchElementException ex) { //np. brak liczby
+            return 0;
+        }
     }
 
     public void printMenuItems(){
