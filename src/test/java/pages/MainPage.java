@@ -87,7 +87,7 @@ public class MainPage extends AbstractPage {
             return cityChoosePage;
         }
         catch (Exception e) {
-            System.out.println("INFO: Nie widać okna wyboru miasta (mozliwe ze miasto jest juz wybrane)");
+            System.out.println("WARNING: Nie widać okna wyboru miasta (mozliwe ze miasto jest juz wybrane)");
         }
         return null;
     }
