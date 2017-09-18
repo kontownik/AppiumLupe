@@ -33,6 +33,7 @@ public class APP13CityChangeTest extends BaseTest {
         CityChoosePage cityChoose =  mainPage.getCityChooseIfVisible();
         if(cityChoose instanceof CityChoosePage) {
             cityChoose.isPageLoaded();
+            cityChoose.verifyCityList();
             cityChoose.scrollToTextAndClick(defaultCity);
             System.out.println("INFO: Wybrano domyślne miasto '"+defaultCity+"'");
         }
@@ -55,6 +56,7 @@ public class APP13CityChangeTest extends BaseTest {
         //8.Sprawdzam czy wyświetlilo się okno wyboru
         cityChoose = new CityChoosePage(driver);
         cityChoose.isPageLoaded();
+        cityChoose.verifyCityList();
 
         //9. Wybieram miasto Lomza
         cityChoose.scrollToTextAndClick(otherCity);
@@ -72,6 +74,7 @@ public class APP13CityChangeTest extends BaseTest {
 
         //13.Sprawdzam czy wyświetlilo się okno wyboru
         cityChoose.isPageLoaded();
+        cityChoose.verifyCityList();
 
         //14. Wybieram miasto domyślne (Białystok)
         cityChoose.scrollToTextAndClick(defaultCity);

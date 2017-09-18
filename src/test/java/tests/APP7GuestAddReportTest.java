@@ -15,8 +15,10 @@ public class APP7GuestAddReportTest extends BaseTest {
 
         //* Zmienne wejsciowe
         String defaultCity = "Białystok"; //TODO: dodac do properties?
-        String expectedName = "Gość";
-        String expectedEmail ="(brak)";
+        String[] categoryArray = { "Awaria oświetlenia ulicznego", "Dewastacja mienia","Komunikacja", "Porządek i śmieci", "Wodociągi i kanalizacja", "Zagrożenie bezpieczeństwa", "Zieleń", "Inne" };
+        String newCategory = categoryArray[(int) (Math.random() * categoryArray.length)];
+        String newDescription = "APPIUM opis wygenerowany automatycznie dla kategorii "+newCategory;
+        String newPictureFilename = "";
 
         //1. Otwiera się strona logowania
         LoginPage loginPage = new LoginPage(driver);
@@ -32,6 +34,7 @@ public class APP7GuestAddReportTest extends BaseTest {
         CityChoosePage cityChoose =  mainPage.getCityChooseIfVisible();
         if(cityChoose instanceof CityChoosePage) {
             cityChoose.isPageLoaded();
+            cityChoose.verifyCityList();
             cityChoose.scrollToTextAndClick(defaultCity);
             System.out.println("INFO: Wybrano domyślne miasto '"+defaultCity+"'");
         }
@@ -43,13 +46,37 @@ public class APP7GuestAddReportTest extends BaseTest {
 
         //Potwierdza miejsce wskazywane przez marker
         newMarkerMap.pickPlace();
+        System.out.println("INFO: Wybrano lokalizację za pomocą markera");
 
         //card?
         //Potwierzenie lokalizacji (przechodzi na stronę edycji)
         newMarkerMap.confirmCard();
+        System.out.println("INFO: Potwierdzono lokalizację zgłoszenia");
 
         //Wyświetla się strona dodawania nowego zgłoszenia
         AddEventPage addEventPage = new AddEventPage(driver);
+        addEventPage.isPageLoaded();
+        System.out.println("INFO: Udało się wyświetlić stronę dodawania nowego zgłoszenia");
+
+        //Wypelniam formularz danymi i wysyłam
+        addEventPage.addReport(newCategory, newDescription, newPictureFilename);
+
+        //Sprawdzam czy przeszlo na stronę główną i wyświetlił się dobry komunikat
+        CityChoosePage successPopup = new CityChoosePage(driver);
+        successPopup.isPageLoaded();
+        successPopup.verifyReportAdded();
+        System.out.println("INFO: Pojawiło się okno potwierdzające dodanie zgłoszenia");
+
+        //15. Otwieram menu
+        mainPage.openMenu();
+        MenuPage menuPage = new MenuPage(driver);
+        menuPage.isPageLoaded();
+        System.out.println("INFO: Udało się otworzyć menu boczne");
+
+        //16. Wylogowuje się przez menu
+        menuPage.scrollToTextAndClick("Wyloguj");
+        System.out.println("INFO: Wylogowano przez boczne menu");
+
     }
 
 }

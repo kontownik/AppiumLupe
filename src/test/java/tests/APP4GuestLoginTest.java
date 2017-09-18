@@ -35,6 +35,7 @@ public class APP4GuestLoginTest extends BaseTest {
         CityChoosePage cityChoose =  mainPage.getCityChooseIfVisible();
         if(cityChoose instanceof CityChoosePage) {
             cityChoose.isPageLoaded();
+            cityChoose.verifyCityList();
             cityChoose.scrollToTextAndClick(defaultCity);
             System.out.println("INFO: Wybrano domyślne miasto '"+defaultCity+"'");
         }

@@ -4,50 +4,45 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 /**
  * Created by Pawel on 2017-04-27.
  */
 public class AddEventPage extends AbstractPage {
 
-    private static final String refreshButtonLocator = "pl.bitsa.lupe2:id/action_refresh";
     private static final String actionBarLocator = "pl.bitsa.lupe2:id/action_bar";
     private static final String toolbarGoBackLocator = "//android.widget.ImageButton[contains(@content-desc,'Przejdź wyżej')]";
+    private static final String addPictureButtonLocator = "pl.bitsa.lupe2:id/action_add_pictures";
 
-    private static final String categoryLocator = "pl.bitsa.lupe2:id/text_event_details_category";
-    private static final String descriptionLocator = "pl.bitsa.lupe2:id/event_card_title_description";
-    private static final String addressLocator = "pl.bitsa.lupe2:id/text_event_details_address";
-    private static final String dateLocator = "pl.bitsa.lupe2:id/text_event_details_date";
-    private static final String notesLocator = "pl.bitsa.lupe2:id/text_event_details_notes";
-    private static final String thumbnailContainerLocator = "pl.bitsa.lupe2:id/horizontal_scroll_thumbnails";
-    private static final String firstThumbnailLocator = "pl.bitsa.lupe2:id/image_event_thumbnail";
+    private static final String categorySelectLocator = "pl.bitsa.lupe2:id/add_event_category_spinner";
+    private static final String singleCategoryItemLocator = "android.widget.CheckedTextView"; //classname
+    private static final String addressTextLocator = "pl.bitsa.lupe2:id/add_event_address_text";
+    private static final String descriptionAddLocator = "pl.bitsa.lupe2:id/add_event_edit_description";
+    private static final String confirmButtonLocator = "pl.bitsa.lupe2:id/add_event_confirm_button";
+    private static final String cancelButtonLocator = "pl.bitsa.lupe2:id/add_event_cancel_button";
 
     private static final String touchOutsideLocator = "pl.bitsa.lupe2:id/touch_outside";
 
-    @AndroidFindBy(id = refreshButtonLocator)
-    private WebElement refreshButton;
     @AndroidFindBy(id = actionBarLocator)
     private WebElement actionBar;
     @AndroidFindBy(xpath = toolbarGoBackLocator)
     private WebElement toolbarGoBack;
+    @AndroidFindBy(id = addPictureButtonLocator)
+    private WebElement addPictureButton;
 
-    @AndroidFindBy(id = categoryLocator)
-    private WebElement category;
-    @AndroidFindBy(id = descriptionLocator)
-    private WebElement description;
-    @AndroidFindBy(id = addressLocator)
-    private WebElement address;
-    @AndroidFindBy(id = dateLocator)
-    private WebElement date;
-    @AndroidFindBy(id = notesLocator)
-    private WebElement notes;
-    @AndroidFindBy(id = thumbnailContainerLocator)
-    private WebElement thumbnailContainer;
-    @AndroidFindBy(id = firstThumbnailLocator)
-    private WebElement firstThumbnail;
-
-    //tlo
-    @AndroidFindBy(id = touchOutsideLocator)
-    private WebElement touchOutside;
+    @AndroidFindBy(id = categorySelectLocator)
+    private WebElement categorySelect;
+    @AndroidFindBy(className = singleCategoryItemLocator)
+    private List<WebElement> categoryList;
+    @AndroidFindBy(id = addressTextLocator)
+    private WebElement addressText;
+    @AndroidFindBy(id = descriptionAddLocator)
+    private WebElement descriptionAdd;
+    @AndroidFindBy(id = confirmButtonLocator)
+    private WebElement confirmButton;
+    @AndroidFindBy(id = cancelButtonLocator)
+    private WebElement cancelButton;
 
     public AddEventPage(AndroidDriver driver) {
         super(driver);
@@ -59,37 +54,57 @@ public class AddEventPage extends AbstractPage {
         waitForActivity(".AddEventActivity");
         System.out.println("INFO: Przejście do: "+getCurrentAndroidActivity());
 
+        //klawiatura
+        nativeHideKeyboard();
+
         //elementy
         isVisible(actionBar);
         isVisible(toolbarGoBack);
-        isVisible(category);
-        isVisible(address);
-        isVisible(date);
-        isVisible(notes);
+        isVisible(addPictureButton);
+        isVisible(addressText);
+        isVisible(categorySelect);
+        isVisible(descriptionAdd);
+        isVisible(confirmButton);
+        isVisible(cancelButton);
         return true;
     }
 
-    public void printCurrentDetails(){
-        try {
-            String categoryText = category.getText();
-            String descriptionText = description.getText();
-            String addressText = address.getText();
-            String dateText = date.getText();
-            String notesText = notes.getText();
-            System.out.println("Kategoria: "+categoryText+"\nOpis: "+descriptionText+"\nAdres: "+addressText+"\nData: "+dateText+"\nUwagi: "+notesText);
-        }
-        catch (Exception ex){
-            throw new Error("ERROR: Nie można wyświetlić szczegółów | "+ex);
+    public void setCategory(String value){
+        //scrollIntoView("Kategoria");
+        //isVisible(categorySelect);
+        categorySelect.click();
+        for(WebElement item:categoryList){
+            if(item.getText().equals(value)){
+                item.click();
+                return;
+            }
         }
     }
 
-    public void clickOutside(){
-        try {
-            touchOutside.click();
+    public String getAddress(){
+        //scrollIntoView("Adres");
+        //isVisible(addressText);
+        return addressText.getText();
+    }
+
+    public void setDescription(String value){
+        descriptionAdd.click();
+        descriptionAdd.sendKeys(value);
+        checkIfTyped(descriptionAdd, value);
+        nativeGoBack();
+    }
+
+    public void addPicture(String picFilename){
+        addPictureButton.click();
+    }
+
+    public void addReport(String newCategory, String newDescription, String picFilename){
+        setCategory(newCategory);
+        setDescription(newDescription);
+        if(!picFilename.equals("")){
+            addPicture(picFilename);
         }
-        catch (Exception ex){
-            throw new Error("ERROR: Nie można cofnąć za pomocą clickOutside");
-        }
+        confirmButton.click();
     }
 
 }

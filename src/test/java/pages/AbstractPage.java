@@ -64,9 +64,37 @@ public abstract class AbstractPage {
         driver.pressKeyCode(AndroidKeyCode.BACK);
     }
 
+    public void nativeHideKeyboard() {
+        try{
+            driver.hideKeyboard();
+        }
+        catch (Exception ex){
+            System.out.println("WARNING: Nie udało się ukryć klawiatury (nie jest wyświetlona)");
+        }
+    }
+
+    public void checkIfTyped(final WebElement element, final String expectedValue){
+        new WebDriverWait(driver,10).until(new ExpectedCondition<Boolean>() {
+
+            public Boolean apply(WebDriver driver) {
+                String value = element.getText();
+                return value.equals(expectedValue);
+            }
+        });
+    }
+
     public void scrollToTextAndClick(String value) {
         try {
             driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(" + "new UiSelector().text(\"" + value + "\"));").click();
+        }
+        catch (Exception e){
+            throw new Error(e);
+        }
+    }
+
+    public void scrollIntoView(String value){
+        try {
+            driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(" + "new UiSelector().text(\"" + value + "\"));");
         }
         catch (Exception e){
             throw new Error(e);
